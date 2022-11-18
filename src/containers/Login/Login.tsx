@@ -21,15 +21,15 @@ export default function Login( props: any ) {
         username: {
             elementType: 'input',
             elementConfig: {
-              help: '',
-              type: 'text',
-              disabled: false,
-              placeholder: 'Username',
-              warning: 'Enter the username',
+            help: '',
+            type: 'text',
+            disabled: false,
+            placeholder: 'Username',
+            warning: 'Enter the username',
             },
             value: '',
             validation: {
-              required: true,
+            required: true,
             },
             valid: true,
             touched: false,
@@ -37,19 +37,19 @@ export default function Login( props: any ) {
         password: {
             elementType: 'input',
             elementConfig: {
-              help: '',
-              type: 'password',
-              disabled: true,
-              placeholder: 'Password',
-              warning: 'Enter the password',
+            help: '',
+            type: 'password',
+            disabled: true,
+            placeholder: 'Password',
+            warning: 'Enter the password',
             },
             value: '',
             validation: {
-              required: true,
+            required: true,
             },
             valid: false,
             touched: false,
-          },
+        },
     });
 
     const inputChangeHandler = (event: any, controlName: string) => {
@@ -69,24 +69,25 @@ export default function Login( props: any ) {
 
             let dataLogin: any = new FormData();
 
-            dataLogin.append('lang_id', 'en');
-            dataLogin.append('device_token', 'sss');
             dataLogin.append('email', form.username.value);
             dataLogin.append('password', form.password.value);
+            dataLogin.append('lang_id', 'en');
+            dataLogin.append('device_token', 'sss');
 
-            let formObj = {
-                url: loginURL,
-                method: 'post',
-                data: dataLogin,
-                headers: { "Content-Type": "multipart/form-data" }                
-            }
+            // console.log(dataLogin)
 
-            axios(formObj)
+            const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+
+            axios.post( loginURL, dataLogin, config )
                 .then(function (response) {
                     
+                    // console.log(response.data)
                     ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
 
-                    props.navigation.navigate('Tab')
+                    if( response.data.status ){
+
+                        props.navigation.navigate('Tab')
+                    }
                 })
                 .catch(function (error) {
                     console.log('error----------', error);
